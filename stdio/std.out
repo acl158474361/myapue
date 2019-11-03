@@ -1,0 +1,5 @@
+print some characters
+stream = stdin, fully buffered, buffer_size = 512
+stream = stdout, fully buffered, buffer_size = 512
+stream = stderr, unbuffered, buffer_size = 1
+stream = /etc/passwd, fully buffered, buffer_size = 512

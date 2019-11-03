@@ -1,0 +1,20 @@
+total 88
+drwxr-xr-x 1 icecream icecream   512 Sep 24 09:58 ./
+drwxr-xr-x 1 icecream icecream   512 Mar 20  2014 ../
+-rw-r--r-- 1 icecream icecream   314 Mar 20  2014 Makefile
+-rw-r--r-- 1 icecream icecream   680 Mar 20  2014 cmd1.c
+-rw-r--r-- 1 icecream icecream   423 Mar 20  2014 cmd2.c
+-rwxrwxrwx 1 icecream icecream 13328 Sep 24 09:58 doatexit*
+-rw-r--r-- 1 icecream icecream   465 Mar 20  2014 doatexit.c
+-rwxrwxrwx 1 icecream icecream  8344 Sep 24 09:58 echoarg*
+-rw-r--r-- 1 icecream icecream   178 Mar 20  2014 echoarg.c
+-rwxrwxrwx 1 icecream icecream 13328 Sep 24 09:58 getrlimit*
+-rw-r--r-- 1 icecream icecream  1309 Mar 20  2014 getrlimit.c
+-rwxrwxrwx 1 icecream icecream  8304 Sep 24 09:58 hello1*
+-rw-r--r-- 1 icecream icecream    58 Mar 20  2014 hello1.c
+-rw-r--r-- 1 icecream icecream   275 Mar 20  2014 opendata.c
+-rw-rw-rw- 1 icecream icecream  1816 Sep 24 09:58 opendata.o
+-rw-r--r-- 1 icecream icecream   132 Mar 20  2014 scope.c
+-rw-rw-rw- 1 icecream icecream  1496 Sep 24 09:58 scope.o
+-rwxrwxrwx 1 icecream icecream  8632 Sep 24 09:58 testjmp*
+-rw-r--r-- 1 icecream icecream   986 Mar 20  2014 testjmp.c
