@@ -1,5 +1,5 @@
 PROGS = threadid exitcode badexit2 cleanup mutex1.o mutex2.o mutex3.o\
-rwlock.o barrier
+rwlock.o barrier Tpthread_create
 
 all: $(PROGS)
 
