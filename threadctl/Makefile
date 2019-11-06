@@ -1,28 +1,10 @@
-ROOT=..
-PLATFORM=$(shell $(ROOT)/systype.sh)
-include $(ROOT)/Make.defines.$(PLATFORM)
+PROGS = detach.o Tpthread_attr
+CC =  gcc
 
-TOUT =
-ifeq "$(PLATFORM)" "freebsd"
-  EXTRALIBS = -pthread
-endif
-ifeq "$(PLATFORM)" "linux"
-  EXTRALIBS = -pthread
-  TOUT = timeout.o
-endif
-ifeq "$(PLATFORM)" "solaris"
-  EXTRALIBS = -lpthread
-  TOUT = timeout.o
-endif
+all: $(PROGS)
 
-PROGS =	atfork suspend
+%:%.c 
+	$(CC) -I../include -o $@ $< -L../lib -lapue -lpthread -lbsd
 
-all:	$(PROGS) detach.o getenv1.o getenv2.o getenv3.o $(TOUT)
-
-%:	%.c $(LIBAPUE)
-	$(CC) $(CFLAGS) $@.c -o $@ $(LDFLAGS) $(LDLIBS)
-
-clean:
-	rm -f $(PROGS) $(TEMPFILES) *.o
-
-include $(ROOT)/Make.libapue.inc
+%.o:%.c
+	$(CC) -c -I../include -o $@ $< -L../lib -lapue -lpthread -lbsd
