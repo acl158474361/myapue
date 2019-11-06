@@ -99,12 +99,12 @@ int main(void){
 
     if(condition){
         clock_gettime(CLOCK_REALTIME, &when);
-        when.tv_sec += 10;
+        when.tv_sec += 5;
         timeout(&when, retry, (void*)((unsigned long)arg));
     }
 
     pthread_mutex_unlock(&mutex);
-
+    sleep(10);
     exit(0);
 }
 
