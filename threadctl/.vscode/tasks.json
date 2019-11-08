@@ -13,7 +13,8 @@
                 "-o",
                 "${fileDirname}/${fileBasenameNoExtension}",
                 "-L../lib",
-                "-lapue"
+                "-lapue",
+                "-lpthread"
             ],
             "options": {
                 "cwd": "/home/icecream/myapue/proc"

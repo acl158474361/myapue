@@ -1,4 +1,4 @@
-PROGS = detach.o Tpthread_attr timeout
+PROGS = detach.o Tpthread_attr timeout getenv.o getenv_r.o getenv_r2.o 
 CC =  gcc
 
 all: $(PROGS)
@@ -7,7 +7,7 @@ all: $(PROGS)
 	$(CC) -I../include -o $@ $< -L../lib -lapue -lpthread 
 
 %.o:%.c
-	$(CC) -c -I../include -o $@ $<  
+	$(CC) -c -I../include -o $@ $<  -L../lib -lapue -lpthread
 
 timeout: detach.o timeout.o
 	$(CC) -o timeout detach.o timeout.o -L../lib -lapue -pthread
