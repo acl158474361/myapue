@@ -1,4 +1,4 @@
-PROGS = detach.o Tpthread_attr timeout getenv.o getenv_r.o getenv_r2.o 
+PROGS = detach.o Tpthread_attr timeout getenv.o getenv_r.o getenv_r2.o  suspend
 CC =  gcc
 
 all: $(PROGS)

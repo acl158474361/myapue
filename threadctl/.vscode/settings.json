@@ -7,6 +7,7 @@
         "errno.h": "c",
         "stdio.h": "c",
         "system.h": "c",
-        "pthread.h": "c"
+        "pthread.h": "c",
+        "signal.h": "c"
     }
 }
