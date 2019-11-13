@@ -66,11 +66,3 @@ void daemonize(const char *cmd){
 	
 }
 
-
-int main(void){
-
-	daemonize("dddd");
-	for(;;){
-		
-	}
-}
