@@ -70,5 +70,7 @@ void daemonize(const char *cmd){
 int main(void){
 
 	daemonize("dddd");
-	sleep(30);
+	for(;;){
+		
+	}
 }
