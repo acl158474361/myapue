@@ -75,7 +75,3 @@ void daemonize(const char *cmd){
 	
 }
 
-int main(){
-	daemonize("pr");
-	
-}

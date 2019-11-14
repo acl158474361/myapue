@@ -1,4 +1,4 @@
-PROGS = init single.o  
+PROGS = init.o single.o  
 
 all: $(PROGS)
 

@@ -19,7 +19,7 @@ void *thr_fn(void *arg){
         err = sigwait(&mask, &signo);
         if(err != 0){
             syslog(LOG_ERR, "sigwait failed");
-            exit(1);
+            exit(1);  //线程exit(1) 会导致进程退出
         }
 
         switch(signo){
