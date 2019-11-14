@@ -1,6 +1,7 @@
 #include "apue.h"
 #include <pthread.h>
 #include <syslog.h>
+#include "init.c"
 
 sigset_t mask;
 
@@ -44,6 +45,34 @@ int main(int argc, char* argv[]){
     char *cmd;
     struct sigaction sa;
 
+    if ((cmd = strrchr(argv[0], '/')) == NULL)
+		cmd = argv[0];
+	else
+		cmd++;
+
+    daemonize(cmd);
+
+    if(already_running()){
+        syslog(LOG_ERR, "daemon already running");
+        exit(1);
+    }
+
+    sa.sa_handler = SIG_DFL;
+    sigemptyset(&sa.sa_mask);
+    sa.sa_flags = 0;
+
+    if(sigaction(SIGHUP, &sa, NULL) < 0)
+        err_quit("%s: can't restore SIGHUB default");
     
+    sigfillset(&mask);
+    if( (err = pthread_sigmask(SIG_BLOCK, &mask, NULL)) != 0)
+        err_exit(err, "SIG_BLOCK error");
+
+    err = pthread_create(&tid, NULL, thr_fn, 0);
+    if(err != 0)
+        err_exit(err, "can't create thread");
+
+
+    exit(0);
 
 }

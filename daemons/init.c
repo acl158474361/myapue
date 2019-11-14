@@ -4,7 +4,14 @@
 #include <sys/resource.h>
 
 
-
+static void
+pr_ids(char *name)
+{
+        printf("%s: pid = %ld, ppid = %ld, pgrp = %ld, tpgrp = %ld sid = %ld\n",
+            name, (long)getpid(), (long)getppid(), (long)getpgrp(),
+            (long)tcgetpgrp(STDIN_FILENO),(long)(getsid(getpid())));
+        fflush(stdout);
+}
 
 void daemonize(const char *cmd){
 
@@ -17,16 +24,16 @@ void daemonize(const char *cmd){
 	//获取文件描述符的最大个数 ，用来关闭所有的文件描述符
 	if(getrlimit(RLIMIT_NOFILE, &rl) < 0)
 		err_quit("%s: can't get file limit", cmd);
-
+	pr_ids("original");
 	if( (pid = fork()) < 0)
 		err_quit("%s: can't fork", cmd);
 	else if(pid != 0)
 		exit(0);
-	
-
+	sleep(1);
+	pr_ids("first child");
 	//fork 为了使进程不是 该进程所在进程组的组长进程
 	setsid();
-	
+	pr_ids("first child after setsid");
 	
 	/*
 	 * Ensure future opens won't allocate controlling TTYs.
@@ -40,7 +47,8 @@ void daemonize(const char *cmd){
 		err_quit("%s: can't fork", cmd);
 	else if (pid != 0) /* parent */
 		exit(0);
-
+	sleep(1);
+	pr_ids("second child");
 
 	if(chdir("/") < 0)
 		err_quit("%s: can't change directory to /", cmd);
@@ -62,7 +70,12 @@ void daemonize(const char *cmd){
 		  fd0, fd1, fd2);
 		exit(1);
 	}
+
 	
 	
 }
 
+int main(){
+	daemonize("pr");
+	
+}
