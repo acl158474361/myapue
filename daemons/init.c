@@ -3,18 +3,19 @@
 #include <fcntl.h>
 #include <sys/resource.h>
 
-
+int printtag = 0;
 static void
-pr_ids(char *name)
-{
+pr_ids(char *name,int tag)
+{	if(tag){
         printf("%s: pid = %ld, ppid = %ld, pgrp = %ld, tpgrp = %ld sid = %ld\n",
             name, (long)getpid(), (long)getppid(), (long)getpgrp(),
             (long)tcgetpgrp(STDIN_FILENO),(long)(getsid(getpid())));
         fflush(stdout);
+	}
 }
 
 void daemonize(const char *cmd){
-
+	
 	int i,fd0,fd1,fd2;
 	pid_t pid;
 	struct rlimit rl;
@@ -24,16 +25,16 @@ void daemonize(const char *cmd){
 	//获取文件描述符的最大个数 ，用来关闭所有的文件描述符
 	if(getrlimit(RLIMIT_NOFILE, &rl) < 0)
 		err_quit("%s: can't get file limit", cmd);
-	pr_ids("original");
+	pr_ids("original", printtag);
 	if( (pid = fork()) < 0)
 		err_quit("%s: can't fork", cmd);
 	else if(pid != 0)
 		exit(0);
 	sleep(1);
-	pr_ids("first child");
+	pr_ids("first child", printtag);
 	//fork 为了使进程不是 该进程所在进程组的组长进程
 	setsid();
-	pr_ids("first child after setsid");
+	pr_ids("first child after setsid", printtag);
 	
 	/*
 	 * Ensure future opens won't allocate controlling TTYs.
@@ -48,7 +49,7 @@ void daemonize(const char *cmd){
 	else if (pid != 0) /* parent */
 		exit(0);
 	sleep(1);
-	pr_ids("second child");
+	pr_ids("second child", printtag);
 
 	if(chdir("/") < 0)
 		err_quit("%s: can't change directory to /", cmd);
