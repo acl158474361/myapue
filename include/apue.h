@@ -51,7 +51,7 @@ long	 open_max(void);					/* {Prog openmax} */
 
 int		 set_cloexec(int);					/* {Prog setfd} */
 void	 clr_fl(int, int);
-void	 set_ffl(int, int);					/* {Prog setfl} */
+void	 set_fl(int, int);					/* {Prog setfl} */
 
 void	 pr_exit(int);						/* {Prog prexit} */
 
