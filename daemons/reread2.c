@@ -56,7 +56,9 @@ int main(int argc, char* argv[]){
         exit(1);
     }
 
-
+    for(;;){
+        
+    }
 
 
     exit(0);
