@@ -1,4 +1,4 @@
-PROGS = init.o lockfile.o set_cloexec.o single.o reread reread2
+PROGS = init.o lockfile.o set_cloexec.o single.o reread reread2 
 
 all: $(PROGS)
 
@@ -14,8 +14,8 @@ reread:  single.o reread.o lockfile.o
 	gcc -o reread  single.o reread.o  lockfile.o -L../lib -lapue -lpthread
 
 reread2: single.o reread2.o lockfile.o
-	gcc -o reread  single.o reread.o  lockfile.o -L../lib -lapue -lpthread
+	gcc -o reread2  single.o reread2.o  lockfile.o -L../lib -lapue -lpthread
 
 
 clean:
-	rm $(PROGS)
+	rm $(PROGS) reread2.o reread.o

@@ -1,9 +1,9 @@
 #include "apue.h"
 #include <syslog.h>
 #include <string.h>
-#include "single.c"
+#include <errno.h>
 
-
+extern int already_running(void);
 
 
 void reread(){

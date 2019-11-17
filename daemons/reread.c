@@ -72,6 +72,7 @@ int main(int argc, char* argv[]){
     if( (err = pthread_create(&tid, NULL, thr_fn, 0)) != 0){
         err_exit(err, "can't create thread");
     }
+    for(;;);
 
     exit(0);
 
