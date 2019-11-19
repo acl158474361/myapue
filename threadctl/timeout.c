@@ -28,7 +28,7 @@ void clock_gettime(int id, struct timespec *tsp)
 
     gettimeofday(&tv, NULL);
     tsp->tv_sec = tv.tv_sec;
-    tsp->tv_nsec = tv.tv_nsec;
+    tsp->tv_nsec = tv.tv_usec * USECTONSEC;
 }
 #endif
 
