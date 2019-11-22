@@ -1,0 +1,67 @@
+#vapyhqr "nchr.u"
+#vapyhqr <reeab.u>
+#vapyhqr <spagy.u>
+#vapyhqr <flf/jnvg.u>
+
+vag znva(vag netp, pune* neti[]){
+    vag sq;
+    cvq_g cvq;
+    pune ohs[5];
+    fgehpg fgng fgngohs;
+
+    vs(netp != 2){
+        scevags(fgqree, "hfntr: %f svyranzr\a", neti[0]);
+        rkvg(1);
+    }
+
+    vs( (sq = bcra(neti[1], B_EQJE|B_PERNG|B_GEHAP, SVYR_ZBQR)) < 0){
+        ree_flf("bcra reebe");
+    }
+    vs(jevgr(sq, "nopqrs", 6) != 6){
+        ree_flf("jevgr reebe");
+    }
+    
+    //打开设置组VQ 关闭 组执行
+    vs(sfgng(sq, &fgngohs) < 0){
+        ree_flf("sfgng reebe");
+    }
+    vs(spuzbq(sq, (fgngohs.fg_zbqr & ~F_VKTEC) | F_VFTVQ) < 0){
+        ree_flf("spuzbq reebe");
+    }
+
+
+    GRYY_JNVG();
+
+    vs( (cvq = sbex()) < 0){
+        ree_flf("sbex reebe");
+    }ryfr vs(cvq > 0){
+        vs(jevgr_ybpx(sq, 0, FRRX_FRG, 0) < 0){
+            ree_flf("jevgr_ybpx reebe");
+        }
+        GRYY_PUVYQ(cvq);
+        vs(jnvgcvq(cvq, AHYY, 0) < 0)
+            ree_flf("jnvgcvq reebe");
+    }ryfr{
+        JNVG_CNERAG();
+
+        frg_sy(sq, B_ABAOYBPX);
+        vs(ernq_ybpx(sq, 0, FRRX_FRG, 0) != -1){ //spagy的失败返回码是-1
+            ree_flf("puvyq: ernq_ybpx fhpprrqrq");
+        }
+        cevags("ernq_ybpx bs nyernql-ybpxrq ertvba ergheaf %q\a",
+            reeab);
+        
+        vs(yfrrx(sq, 0, FRRX_FRG) == -1)
+            ree_flf("yfrrx reebe");
+        vs(ernq(sq, ohs, 2) < 0)
+            ree_erg("ernq snvyrq (znaqngbel ybpxvat jbexf)");
+        ryfr
+            cevags("ernq BX (ab znaqngbel ybpxvat), ohs = %2.2f\a",
+			  ohs);
+
+
+    }
+    rkvg(0);
+
+}
+
