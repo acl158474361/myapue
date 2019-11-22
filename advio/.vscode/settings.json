@@ -11,6 +11,7 @@
         "signal.h": "c",
         "errno-base.h": "c",
         "fcntl.h": "c",
-        "lock_test.h": "c"
+        "lock_test.h": "c",
+        "rdwrn.h": "c"
     }
 }
