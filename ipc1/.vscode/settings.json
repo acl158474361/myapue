@@ -12,6 +12,8 @@
         "errno-base.h": "c",
         "fcntl.h": "c",
         "lock_test.h": "c",
-        "rdwrn.h": "c"
+        "rdwrn.h": "c",
+        "resource.h": "c",
+        "limits.h": "c"
     }
 }

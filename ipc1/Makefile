@@ -1,4 +1,4 @@
-PROGS = pipe1 pipe2
+PROGS = pipe1 pipe2 popen1
 
 all: $(PROGS)
 
