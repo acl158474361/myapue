@@ -1,4 +1,4 @@
-PROGS = pipe1
+PROGS = pipe1 pipe2
 
 all: $(PROGS)
 
