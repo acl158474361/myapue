@@ -20,7 +20,7 @@ int main(){
         }
         
     }
-    //当父进程的写段关闭时 read会返回0
+    //当父进程的写端关闭时 read会返回0
     
     err_msg("outof while block n = %d", n);
     exit(0);
