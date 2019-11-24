@@ -4,7 +4,7 @@ int main(){
     int int1, int2;
     int n;
     char line[MAXLINE];
-    while( (n = read(STDOUT_FILENO, line, MAXLINE)) > 0){
+    while( (n = read(STDIN_FILENO, line, MAXLINE)) > 0){
         //read不会为读取到的最后一个字节后面加上'\0' ,需要我们手动处理 不然数据会和前几次的数据混淆
         line[n] = 0;
         if(sscanf(line, "%d%d", &int1, &int2) == 2){//sscanf 只会扫描到第一个 '\0'
@@ -20,5 +20,8 @@ int main(){
         }
         
     }
+    //当父进程的写段关闭时 read会返回0
+    
+    err_msg("outof while block n = %d", n);
     exit(0);
 }
