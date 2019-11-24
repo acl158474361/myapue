@@ -45,7 +45,7 @@ int main(void){
             err_sys("fgets error");
         }
         
-        exit(0);
+        exit(0);  //exit 时候 所有文件描述符关闭 管道的写端 pfd1[1] 关闭
 
     }else{
         //child
