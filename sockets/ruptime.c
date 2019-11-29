@@ -31,12 +31,12 @@ int main(int argc, char* argv[]){
         err_quit("usage: a.out <hostname>");
     }
     memset(&hint, 0, sizeof(hint));
-    hint.ai_protocol = SOCK_STREAM;
+    hint.ai_socktype = SOCK_STREAM;
     hint.ai_canonname = NULL;
     hint.ai_addr = NULL;
     hint.ai_next = NULL;
 
-    if( (err = getaddrinfo(argv[0], "ruptime", &hint, &ailist)) != 0){
+    if( (err = getaddrinfo(argv[1], "ruptime", &hint, &ailist)) != 0){
         err_quit("getaddrinfo error: %s", gai_strerror(err));
     }
     for(aip = ailist; aip != NULL; aip = aip->ai_next){

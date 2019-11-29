@@ -72,8 +72,8 @@ int main(int argc, char* argv[]){
         exit(1);
     }
     for(aip = ailist; aip != NULL; aip = aip->ai_next){
-        if(sockfd = initserver(SOCK_STREAM, aip->ai_addr,
-            aip->ai_addrlen, QLEN) >= 0){
+        if( (sockfd = initserver(SOCK_STREAM, aip->ai_addr,
+            aip->ai_addrlen, QLEN)) >= 0){
             serve(sockfd);
             exit(0);
         }
