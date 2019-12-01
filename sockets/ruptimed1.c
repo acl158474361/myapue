@@ -3,6 +3,8 @@
 #include <netdb.h>
 #include <errno.h>
 #include <syslog.h>
+#include <fcntl.h>
+#include <sys/wait.h>
 
 #define BUFLEN 128
 #define QLEN 10
@@ -12,15 +14,42 @@
 
 extern int initserver(int socktype, const struct sockaddr *addr, socklen_t len_addr, int len_queue);
 
+void serve(int sockfd){
+    int cli_sockfd;
+    pid_t pid;
+    set_cloexec(sockfd);
+    for(;;){
+        if( (cli_sockfd = accept(sockfd, NULL, NULL)) < 0){
+            syslog(LOG_ERR, "accept error: %s", strerror(errno));
+            exit(1);
+        }
+        if( (pid = fork()) < 0){
+            syslog(LOG_ERR, "fork error: %s", strerror(errno));
+            exit(1);
+        }else if(pid == 0){
+            /*child*/
+            if(dup2(cli_sockfd, STDOUT_FILENO) != STDOUT_FILENO || dup2(cli_sockfd, STDERR_FILENO) != STDERR_FILENO ){
+                syslog(LOG_ERR, "dup2 error: %s", strerror(errno));
+                exit(1);
+            }
+            close(cli_sockfd);
+            execl("/usr/bin/uptime", "uptime", (char*)0);
+            syslog(LOG_ERR, "execl uptime error: %s", strerror(errno));
+            exit(127);
+        }else{
+            close(cli_sockfd);
+            waitpid(pid, NULL, 0);
+        }
+    }
+}
 int main(int argc, char* argv[]){
     struct addrinfo *ailist, *aip;
     struct addrinfo hint;
-    int sockfd, cli_sockfd;
+    int sockfd;
     int err;
     char *hostname;
-    char buf[BUFLEN];
     int n;
-    FILE *fp;
+    
     if(argc != 1){
         err_quit("usage: a.out");
     }
@@ -46,24 +75,7 @@ int main(int argc, char* argv[]){
     }
     for(aip = ailist; aip != NULL; aip = aip->ai_next){
         if( (sockfd = initserver(SOCK_STREAM, aip->ai_addr, aip->ai_addrlen, QLEN)) >= 0){
-            set_cloexec(sockfd);
-            for(;;){
-                if( (cli_sockfd = accept(sockfd, NULL, NULL)) < 0){
-                    syslog(LOG_ERR, "connect error: %s", strerror(errno));
-                    exit(1);
-                }
-                set_cloexec(cli_sockfd);
-                if( (fp = popen("/usr/bin/uptime", "r")) == NULL){
-                    sprintf(buf, "popen error: %s\n", strerror(errno));
-                    send(sockfd, buf, strlen(buf), 0);
-                }else{
-                    while(fgets(buf, BUFLEN, fp) != NULL){
-                        send(sockfd, buf, strlen(buf), 0);
-                    }
-                    pclose(fp);
-                }
-                close(cli_sockfd);
-            }
+            serve(sockfd);
             exit(0);
         }
     }
