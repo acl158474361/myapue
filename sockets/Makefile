@@ -1,5 +1,5 @@
 PROGS = getaddrinfo connect_retry1.o connect_retry2.o initserver.o\
- ruptime ruptimed ruptimed1
+ ruptime ruptimed ruptimed1 ruptime_u ruptimed_u
 
 all: $(PROGS)
 
@@ -17,3 +17,6 @@ ruptimed: initserver.o ruptimed.o
 
 ruptimed1: initserver.o ruptimed1.o
 	gcc -I../include -o $@ initserver.o ruptimed1.o -L../lib -lapue
+
+ruptimed_u: ruptimed_u.o initserver.o
+	gcc -I../include -o $@ initserver.o ruptimed_u.o -L../lib -lapue
