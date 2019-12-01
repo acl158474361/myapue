@@ -17,6 +17,7 @@ extern int initserver(int socktype, const struct sockaddr *addr, socklen_t len_a
 void serve(int sockfd){
     int cli_sockfd;
     pid_t pid;
+
     set_cloexec(sockfd);
     for(;;){
         if( (cli_sockfd = accept(sockfd, NULL, NULL)) < 0){
@@ -27,15 +28,14 @@ void serve(int sockfd){
             syslog(LOG_ERR, "fork error: %s", strerror(errno));
             exit(1);
         }else if(pid == 0){
-            /*child*/
-            if(dup2(cli_sockfd, STDOUT_FILENO) != STDOUT_FILENO || dup2(cli_sockfd, STDERR_FILENO) != STDERR_FILENO ){
+            if(dup2(cli_sockfd, STDOUT_FILENO) != STDOUT_FILENO || dup2(cli_sockfd, STDERR_FILENO) != STDERR_FILENO){
                 syslog(LOG_ERR, "dup2 error: %s", strerror(errno));
                 exit(1);
             }
             close(cli_sockfd);
             execl("/usr/bin/uptime", "uptime", (char*)0);
-            syslog(LOG_ERR, "execl uptime error: %s", strerror(errno));
-            exit(127);
+            syslog(LOG_ERR, "execl error: %s", strerror(errno));
+            exit(1);
         }else{
             close(cli_sockfd);
             waitpid(pid, NULL, 0);
