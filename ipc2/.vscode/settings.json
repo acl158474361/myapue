@@ -1,0 +1,21 @@
+{
+    "files.associations": {
+        "*.py": "python",
+        "apue.h": "c",
+        "unistd.h": "c",
+        "wait.h": "c",
+        "errno.h": "c",
+        "stdio.h": "c",
+        "system.h": "c",
+        "pthread.h": "c",
+        "signal.h": "c",
+        "errno-base.h": "c",
+        "fcntl.h": "c",
+        "lock_test.h": "c",
+        "rdwrn.h": "c",
+        "resource.h": "c",
+        "limits.h": "c",
+        "netdb.h": "c",
+        "inet.h": "c"
+    }
+}

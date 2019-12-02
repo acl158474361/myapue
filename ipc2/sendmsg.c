@@ -3,31 +3,29 @@
 
 #define MAXMSZ 512
 
-struct mymesg {
-	long mtype;
-	char mtext[MAXMSZ];
+struct mymesg{
+    long type;
+    char text[MAXMSZ];
 };
 
-int
-main(int argc, char *argv[])
-{
-	key_t key;
-	long qid;
-	size_t nbytes;
-	struct mymesg m;
+int main(int argc, char* argv[]){
+    key_t key;
+    struct mymesg msgent;
+    int qid;
+    if(argc != 3){
+        err_quit("usage: a.out key msg");
+    }
+    key = strtol(argv[1], NULL, 0);
+    memset(&msgent, 0, sizeof(msgent));
 
-	if (argc != 3) {
-		fprintf(stderr, "usage: sendmsg KEY message\n");
-		exit(1);
-	}
-	key = strtol(argv[1], NULL, 0);
-	if ((qid = msgget(key, 0)) < 0)
-		err_sys("can't open queue key %s", argv[1]);
-	memset(&m, 0, sizeof(m));
-	strncpy(m.mtext, argv[2], MAXMSZ-1);
-	nbytes = strlen(m.mtext);
-	m.mtype = 1;
-	if (msgsnd(qid, &m, nbytes, 0) < 0)
-		err_sys("can't send message");
-	exit(0);
+    if( (qid = msgget(key, 0)) < 0){
+        err_sys("can't get msgqueue");
+    }
+    strncpy(msgent.text, argv[2], MAXMSZ-1);
+    strcat(msgent.text, "\n");
+    msgent.type = 1;
+    if(msgsnd(qid, &msgent, strlen(msgent.text), 0) < 0){
+        err_sys("msgsnd error");
+    }
+    exit(0);
 }
