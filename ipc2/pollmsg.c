@@ -31,8 +31,8 @@ void *thr_fn(void *arg){
             pthread_exit((void*)-1);
         }
         //写入数据
-        msgent.mtext[n] = '\0';
-        if(write(info->fds[1], (&msgent)->mtext, strlen((&msgent)->mtext)) != strlen(msgent.mtext)){
+        printf("n is %d\n",n);
+        if(write(info->fds[1], msgent.mtext, n) != n){
             err_msg("write error, msg_id = %ld, t_id = %ld", info->msg_id, info->t_id);
             pthread_exit((void*)-1);
         }
@@ -69,7 +69,8 @@ int main(int argc, char* argv[]){
         for(int i = 0; i < QSIZE; ++i){
             if(pollfds[i].revents & POLLIN){
                 while( (n = read(pollfds[i].fd, buf, MAXMSZ)) > 0){
-                    write(STDOUT_FILENO, buf, n);
+                    buf[n] = '\0';
+                    printf("%s\n", buf);
                 }
                 if(n < 0){
                     err_sys("read from %d error", pollfds[i].fd);

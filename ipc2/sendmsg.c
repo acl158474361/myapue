@@ -22,7 +22,6 @@ int main(int argc, char* argv[]){
         err_sys("can't get msgqueue");
     }
     strncpy(msgent.text, argv[2], MAXMSZ-1);
-    strcat(msgent.text, "\n");
     msgent.type = 1;
     if(msgsnd(qid, &msgent, strlen(msgent.text), 0) < 0){
         err_sys("msgsnd error");
