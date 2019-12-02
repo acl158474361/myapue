@@ -68,7 +68,7 @@ int main(int argc, char* argv[]){
         }
         for(int i = 0; i < QSIZE; ++i){
             if(pollfds[i].revents & POLLIN){
-                while( (n = read(pollfds[i].fd, buf, MAXMSZ)) > 0){
+                if( (n = read(pollfds[i].fd, buf, MAXMSZ)) > 0){
                     buf[n] = '\0';
                     printf("%s\n", buf);
                 }
