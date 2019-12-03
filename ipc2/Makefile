@@ -1,4 +1,4 @@
-PROGS = pollmsg sendmsg
+PROGS = pollmsg sendmsg bindunix
 
 all: $(PROGS)
 
