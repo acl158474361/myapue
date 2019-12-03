@@ -137,7 +137,7 @@ int cli_conn(const char* name){
     cli_addrlen = offsetof(struct sockaddr_un, sun_path) + strlen(cli_addr.sun_path);
     unlink(cli_addr.sun_path);
     
-    if(bind(cli_sockfd, &cli_addr, cli_addrlen) < 0){
+    if(bind(cli_sockfd, (struct sockaddr*)&cli_addr, cli_addrlen) < 0){
         rval = -3;
         goto errout;
     }
