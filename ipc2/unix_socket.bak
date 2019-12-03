@@ -1,0 +1,168 @@
+#include "unix_socket.h"
+#include <sys/socket.h>
+#include <sys/un.h>
+#include <errno.h>
+
+#define QLEN 10
+
+int serv_listen(const char *name){
+    int sockfd;
+    struct sockaddr_un addr;
+    int size;
+    int err;
+    int rval;
+
+    if(strlen(name) >= sizeof(addr.sun_path)){
+        errno = ENAMETOOLONG;
+        return -1;
+    }
+    if( (sockfd = socket(AF_UNIX, SOCK_STREAM, 0)) < 0){
+        return -2;
+    }
+    unlink(name);
+
+    memset(&addr, 0, sizeof(addr));
+    addr.sun_family = AF_UNIX;
+    strcpy(addr.sun_path, name);
+    size = offsetof(struct sockaddr_un, sun_path) + strlen(addr.sun_path);
+    if(bind(sockfd, (struct sockaddr*)&addr, size) < 0){
+        rval = -3;
+        goto errout;
+    }
+    if(listen(sockfd, QLEN) < 0){
+        rval = -4;
+        goto errout;
+    }
+    return sockfd;
+
+
+errout:
+    err = errno;
+    close(sockfd);
+    errno = err;
+    return rval;
+}
+
+
+int serv_accept(int sockfd, uid_t *uidptr){
+    int cli_sockfd;
+    struct sockaddr_un cli_addr;
+    socklen_t cli_addrlen;
+    char *name;
+    struct stat cli_statbuf;
+    const int STALE = 30;
+    int err, rval;
+    time_t staletime;
+
+
+    if( (name = malloc(sizeof(cli_addr.sun_path) + 1)) == NULL){
+        return -1;
+    }
+    cli_addrlen = sizeof(cli_addr);
+
+    if( (cli_sockfd = accept(sockfd, &cli_addr, &cli_addrlen)) < 0){
+        free(name);
+        return -2;
+    }
+
+    cli_addrlen -= offsetof(struct sockaddr_un, sun_path);
+    memcpy(name, cli_addr.sun_path, cli_addrlen);
+    name[cli_addrlen] = '\0';
+    //name 现在保存的是客户端绑定的地址的路径名
+    if(stat(name, &cli_statbuf) < 0){
+        rval = -3;
+        goto errout;
+    }
+#ifdef S_ISSOCK
+    if(S_ISSOCK(cli_statbuf.st_mode) == 0){
+        rval = -4;
+        goto errout;
+    }
+#endif;
+
+    if( (cli_statbuf.st_mode & (S_IRWXG | S_IRWXO)) ||
+        (cli_statbuf.st_mode & S_IRWXU) != S_IRWXU ){
+        rval = -5;
+        goto errout;
+    }
+
+    staletime = time(NULL) - STALE;
+    if (cli_statbuf.st_atime < staletime ||
+		cli_statbuf.st_ctime < staletime ||
+		cli_statbuf.st_mtime < staletime) {
+		  rval = -6;	/* i-node is too old */
+		  goto errout;
+	}
+
+    if(uidptr != NULL){
+        *uidptr = cli_statbuf.st_uid;
+    }
+
+    unlink(name);
+    free(name);
+    return cli_sockfd;
+
+errout:
+	err = errno;
+	close(cli_sockfd);
+	free(name);
+	errno = err;
+	return(rval);
+    
+}
+
+int cli_conn(const char* name){
+    int cli_sockfd;
+    struct sockaddr_un cli_addr;
+    struct sockaddr_un serv_addr;
+    socklen_t addrlen;
+    const char *CLI_PATH = "/var/tmp/";
+    const int CLI_PERM = S_IRWXU;
+
+    int err, rval, do_unlink = 0;
+
+    if(strlen(name) >= sizeof(cli_addr.sun_path)){
+        errno = ENAMETOOLONG;
+        return -1;
+    }
+
+    if( (cli_sockfd = socket(AF_UNIX, SOCK_STREAM, 0)) < 0){
+        return -1;
+    }
+
+    memset(&cli_addr, 0, sizeof(cli_addr));
+    cli_addr.sun_family = AF_UNIX;
+    sprintf(cli_addr.sun_path, "%s%05ld", CLI_PATH, (long)getpid());
+    printf("file is %s\n", cli_addr.sun_path);
+    addrlen = offsetof(struct sockaddr_un, sun_path) + strlen(cli_addr.sun_path);
+    unlink(cli_addr.sun_path);
+
+    if(bind(cli_sockfd, &cli_addr, addrlen) < 0){
+        rval = -2;
+        goto errout;
+    }
+    if(chmod(cli_addr.sun_path, CLI_PERM) < 0){
+        rval = -3;
+        do_unlink = 1;
+        goto errout;
+    }
+
+    memset(&serv_addr, 0, sizeof(serv_addr));
+    serv_addr.sun_family = AF_UNIX;
+    strcpy(serv_addr.sun_path, name);
+    addrlen = offsetof(struct sockaddr_un, sun_path) + strlen(name);
+    if(connect(cli_sockfd, (struct sockaddr*)&serv_addr, addrlen) < 0){
+        rval = -4;
+        do_unlink = 1;
+        goto errout;
+    }
+    return cli_sockfd;
+    
+errout:
+	err = errno;
+	close(cli_sockfd);
+	if (do_unlink)
+		unlink(cli_addr.sun_path);
+	errno = err;
+	return(rval);
+}
