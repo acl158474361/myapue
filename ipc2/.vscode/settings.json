@@ -16,6 +16,8 @@
         "resource.h": "c",
         "limits.h": "c",
         "netdb.h": "c",
-        "inet.h": "c"
+        "inet.h": "c",
+        "features.h": "c",
+        "socket.h": "c"
     }
 }
