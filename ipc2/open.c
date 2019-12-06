@@ -27,7 +27,7 @@ int csopen(char *name, int oflag){
                 err_ret("dup2 error to stdout");
                 return -1;
             }
-            if(execl("./opend", "opend", (char*)0) < 0){
+            if(execl("./main_server", "main_server", (char*)0) < 0){
                 err_sys("execl error");
             }
         }
@@ -43,7 +43,7 @@ int csopen(char *name, int oflag){
     iov[2].iov_base = buf;
     iov[2].iov_len = strlen(buf) + 1;
     int len = iov[0].iov_len + iov[1].iov_len + iov[2].iov_len;
-    if(writev(fd[0], iov, len) != len){
+    if(writev(fd[0], iov, 3) != len){
         err_ret("writev error");
         return -1;
     }
