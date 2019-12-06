@@ -2,7 +2,7 @@
 #include <sys/uio.h>
 #include <sys/socket.h>
 #include <fcntl.h>
-#include <send_recv.h>
+#include "send_recv.h"
 
 int csopen(char *name, int oflag){
     pid_t pid;
@@ -32,20 +32,21 @@ int csopen(char *name, int oflag){
             }
         }
         close(fd[1]);
-        sprintf(buf, " %d", oflag);
-        iov[0].iov_base = CL_OPEN " ";
-        iov[0].iov_len = strlen(CL_OPEN) + 1;
-        iov[1].iov_base = name;
-        iov[1].iov_len = strlen(name);
-        iov[2].iov_base = buf;
-        iov[2].iov_len = strlen(buf) + 1;
-        int len = iov[0].iov_len + iov[1].iov_len + iov[2].iov_len;
-        if(writev(fd[0], iov, len) != len){
-            err_ret("writev error");
-            return -1;
-        }
         
-        return recv_fd(fd[0], write);
-
     }
+
+    sprintf(buf, " %d", oflag);
+    iov[0].iov_base = CL_OPEN " ";
+    iov[0].iov_len = strlen(CL_OPEN) + 1;
+    iov[1].iov_base = name;
+    iov[1].iov_len = strlen(name);
+    iov[2].iov_base = buf;
+    iov[2].iov_len = strlen(buf) + 1;
+    int len = iov[0].iov_len + iov[1].iov_len + iov[2].iov_len;
+    if(writev(fd[0], iov, len) != len){
+        err_ret("writev error");
+        return -1;
+    }
+        
+    return recv_fd(fd[0], write);
 }

@@ -247,7 +247,7 @@ int recv_fdu(int cli_sockfd, uid_t *uid_ptr,
 
         for(ptr = buf; ptr < &buf[nr];){
             if(*(ptr++) == 0){
-                if(ptr != buf[nr-1]){
+                if(ptr != &buf[nr-1]){
                     err_ret("format error");
                     return -1;
                 }

@@ -4,7 +4,7 @@ char errmsg[MAXLINE];
 int  oflag;
 char *pathname;
 
-int main(int argc, char* argv){
+int main(int argc, char* argv[]){
     int nr;
     char buf[MAXLINE];
     for(;;){

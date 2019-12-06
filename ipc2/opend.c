@@ -7,7 +7,7 @@
 void handle_request(char *buf, int nr, int fd){
     int newfd;
     if(buf[nr-1] != '\0'){
-        sprintf(errmsg, MAXLINE-1, "request not null terminated: %*.*s\n", nr, nr, buf);
+        snprintf(errmsg, MAXLINE-1, "request not null terminated: %*.*s\n", nr, nr, buf);
         send_err(fd, -1, errmsg);
         return;
     }
@@ -16,7 +16,7 @@ void handle_request(char *buf, int nr, int fd){
         return;
     }
     if((newfd = open(pathname, oflag)) < 0){
-        sprintf(errmsg, MAXLINE-1, "can't open %s: %s\n", pathname, strerror(errno));
+        snprintf(errmsg, MAXLINE-1, "can't open %s: %s\n", pathname, strerror(errno));
         send_err(fd, -1, errmsg);
         return;
     }
