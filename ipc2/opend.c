@@ -5,7 +5,7 @@
 #define MAXARGC 50
 #define WHITE " \t\n"
 void handle_request(char *buf, int nr, int fd){
-    int newfd;
+    int newfd = -1;
     if(buf[nr-1] != '\0'){
         snprintf(errmsg, MAXLINE-1, "request not null terminated: %*.*s\n", nr, nr, buf);
         send_err(fd, -1, errmsg);

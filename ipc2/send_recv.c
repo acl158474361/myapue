@@ -27,7 +27,7 @@ static struct cmsghdr *recvu_ctlptr = NULL;
 int send_err(int serv_sockfd, int status, const char *errmsg){
     int n;
     if( (n = strlen(errmsg)) > 0){
-        if(write(serv_sockfd, err_msg, n) != n){
+        if(writen(serv_sockfd, err_msg, n) != n){
             return -1;
         }
     }
@@ -176,7 +176,8 @@ int recv_fd(int cli_sockfd, ssize_t (*userfunc)(int, const void *, size_t)){
         for(ptr = buf; ptr < &buf[nr];){
             if(*(ptr++) == 0){
                 if(ptr != &buf[nr-1]){
-                    err_ret("format error");
+                    err_ret("format error %s\n",buf);
+                    
                     return -1;
                 }
                 status = *ptr & 0xFF;
