@@ -21,6 +21,7 @@ int main(int argc, char* argv[]){
                 err_sys("write error");
             }
         }
+        write(STDOUT_FILENO, "\n", 1);
         if(rn < 0){
             err_sys("read error");
         }
