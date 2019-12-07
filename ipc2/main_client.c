@@ -13,6 +13,7 @@ int main(int argc, char* argv[]){
             line[strlen(line)-1] = '\0';
         }
         if( (fd = csopen(line, O_RDWR)) < 0){
+            fprintf(stderr, "errcode is %d\n", fd);
             continue;
         }
 

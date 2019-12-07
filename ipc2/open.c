@@ -2,7 +2,6 @@
 #include <sys/uio.h>
 #include <sys/socket.h>
 #include <fcntl.h>
-#include "send_recv.h"
 
 int csopen(char *name, int oflag){
     pid_t pid;

@@ -1,6 +1,5 @@
 #include "opend.h"
 #include <fcntl.h>
-#include "send_recv.h"
 
 #define MAXARGC 50
 #define WHITE " \t\n"
@@ -12,7 +11,7 @@ void handle_request(char *buf, int nr, int fd){
         return;
     }
     if(buf_args(buf, cli_args) < 0){
-        send_err(fd, -1, errmsg);
+        send_err(fd, -2, errmsg);
         return;
     }
     if((newfd = open(pathname, oflag)) < 0){
