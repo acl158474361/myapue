@@ -143,7 +143,7 @@ int recv_fd(int cli_sockfd, ssize_t (*userfunc)(int, const void *, size_t)){
     char buf[MAXLINE];
 
 
-    ssize_t nr;
+    int nr;
     char *ptr;
 
     int status;
@@ -176,7 +176,7 @@ int recv_fd(int cli_sockfd, ssize_t (*userfunc)(int, const void *, size_t)){
         for(ptr = buf; ptr < &buf[nr];){
             if(*(ptr++) == 0){
                 if(ptr != &buf[nr-1]){
-                    err_ret("format error %s\n",buf);
+                    err_ret("format error %s",buf);
                     return -1;
                 }
                 status = *ptr & 0xFF;
@@ -211,7 +211,7 @@ int recv_fdu(int cli_sockfd, uid_t *uid_ptr,
         char buf[MAXLINE];
         struct iovec iov[1];
         struct msghdr msg_hdr;
-        ssize_t nr;
+        int nr;
         int newfd = -1;
         int status = -1;
 
