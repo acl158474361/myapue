@@ -1,5 +1,6 @@
 #include "apue.h"
 #include <errno.h>
+#include "unix_socket.h"
 
 #define CL_OPEN "open"
 #define CS_OPEN "/tmp/opend.socket"
@@ -21,6 +22,6 @@ int cli_args(int, char**);
 void handle_request(char *, int, int);
 int client_add(int, uid_t);
 void client_del(int);
-void loop(void);
+void loop_select(void);
 void handled_request(char *, int, int, uid_t);
-
+void loop_poll(void);

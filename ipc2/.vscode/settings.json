@@ -23,6 +23,8 @@
         "opend.h": "c",
         "unix_socket.h": "c",
         "open.h": "c",
-        "getopt.h": "c"
+        "getopt.h": "c",
+        "syslog.h": "c",
+        "select.h": "c"
     }
 }
