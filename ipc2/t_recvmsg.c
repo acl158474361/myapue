@@ -18,8 +18,6 @@ int main(){
     msg_hdr.msg_controllen = 0;
     msg_hdr.msg_iov = iov;
     msg_hdr.msg_iovlen = 1;
-    msg_hdr.msg_control = NULL;
-    msg_hdr.msg_controllen = 0;
     iov[0].iov_base = buf;
     iov[0].iov_len = sizeof(buf);
 
