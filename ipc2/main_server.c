@@ -1,5 +1,5 @@
 #include "opend.h"
-
+#include "send_recv.h"
 char errmsg[MAXLINE];
 int  oflag;
 char *pathname;
