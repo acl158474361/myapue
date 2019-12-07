@@ -177,7 +177,6 @@ int recv_fd(int cli_sockfd, ssize_t (*userfunc)(int, const void *, size_t)){
             if(*(ptr++) == 0){
                 if(ptr != &buf[nr-1]){
                     err_ret("format error %s\n",buf);
-                    
                     return -1;
                 }
                 status = *ptr & 0xFF;
