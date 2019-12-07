@@ -27,7 +27,7 @@ static struct cmsghdr *recvu_ctlptr = NULL;
 int send_err(int serv_sockfd, int status, const char *errmsg){
     int n;
     if( (n = strlen(errmsg)) > 0){
-        if(writen(serv_sockfd, err_msg, n) != n){
+        if(writen(serv_sockfd, errmsg, n) != n){
             return -1;
         }
     }
