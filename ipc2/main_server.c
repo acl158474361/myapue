@@ -14,7 +14,7 @@ int main(int argc, char* argv[]){
             break;
         }
         handle_request(buf, nr, STDOUT_FILENO);
-
+        
     }
     exit(0);
 }

@@ -1,6 +1,4 @@
 #include "unix_socket.h"
-#include <sys/socket.h>
-#include <sys/un.h>
 #include <errno.h>
 
 int serv_listen(const char *name){

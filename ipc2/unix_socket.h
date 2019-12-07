@@ -2,7 +2,8 @@
 #define _UNIX_SOCKET__
 
 #include "apue.h"
-
+#include <sys/socket.h>
+#include <sys/un.h>
 int serv_listen(const char *name);
 
 int serv_accept(int serv_sockfd, uid_t *uidptr);

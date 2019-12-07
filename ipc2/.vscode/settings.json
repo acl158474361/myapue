@@ -20,6 +20,9 @@
         "features.h": "c",
         "socket.h": "c",
         "send_recv.h": "c",
-        "opend.h": "c"
+        "opend.h": "c",
+        "unix_socket.h": "c",
+        "open.h": "c",
+        "getopt.h": "c"
     }
 }
