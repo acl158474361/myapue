@@ -65,7 +65,7 @@ void loop_select(void){
     int clifd; //建立与新到来的客户端连接的socket
     int i; 
     fd_set rset, allset;
-    uid_t uid; //新到来客户端的 有效进程ID
+    uid_t uid; //新到来客户端的 有效用户ID
     int nr; // bytes read from client
     char buf[MAXLINE];
 
@@ -149,9 +149,8 @@ void loop_poll(void){
     int numfd = 1; //被轮询的套接字数目 最开始只有listen套接字 
     //同时也是下一个新加入客户端套接字在pfds中的下标
     int clifd;
-    uid_t uid; //客户端有效进程ID
+    uid_t uid; //客户端有效用户ID
     int maxfd = MALLOC; //pfds可以容纳的最大套接字数目
-    int i;
     int nread; //从客户端套接字中读取的字节数
     char buf[MAXLINE];
     if( (pfds = malloc(MALLOC * sizeof(struct pollfd))) == NULL){
@@ -203,8 +202,17 @@ hungup:
                         client[i].uid, pfds[i].fd);
                     client_del(pfds[i].fd);
                     close(pfds[i].fd);
+					if (i < (numfd-1)) {
+						//如果i不是最后一个元素 压缩数组
+                        pfds[i].fd = pfds[numfd-1].fd; //最后一个元素
+                        pfds[i].events = pfds[numfd-1].events;
+                        pfds[i].revents = pfds[numfd-1].revents;
+                        i--; //i会在for循环的 最后++i语句变回原来的值
+                        //所以会再次检查这个下标下的元素 也就是之前的
+                        //最后一个元素
+					}
+					numfd--;
 
-                    
                 }else{
                     handled_request(buf, nread, pfds[i].fd, 
                         client[i].uid);
