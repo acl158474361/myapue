@@ -1,5 +1,6 @@
 #include "unix_socket.h"
 #include <errno.h>
+#include <time.h>
 
 int serv_listen(const char *name){
     struct sockaddr_un serv_addr;
@@ -50,7 +51,6 @@ int serv_accept(int serv_sockfd, uid_t *uidptr){
     time_t staletime;
 
     int err, rval;
-    int n;
     const int STALE = 30;
 
     cli_addrlen = sizeof(cli_addr);
@@ -58,7 +58,7 @@ int serv_accept(int serv_sockfd, uid_t *uidptr){
         return -1;
     }
 
-    if( (n = malloc(sizeof(cli_addr.sun_path) + 1)) == NULL){
+    if( (cli_name = malloc(sizeof(cli_addr.sun_path) + 1)) == NULL){
         rval = -2;
         goto errout;
     }
@@ -113,7 +113,7 @@ int cli_conn(const char* name){
     int cli_sockfd;
     struct sockaddr_un cli_addr;
     socklen_t cli_addrlen;
-    const char *CLI_PATH = "/var/tmp";
+    const char *CLI_PATH = "/var/tmp/";
     const int CLI_PERM = S_IRWXU;
     
     struct sockaddr_un serv_addr;
@@ -132,6 +132,7 @@ int cli_conn(const char* name){
     memset(&cli_addr, 0, sizeof(cli_addr));
     cli_addr.sun_family = AF_UNIX;
     sprintf(cli_addr.sun_path, "%s%05ld", CLI_PATH, (long)getpid());
+    printf("file is %s\n", cli_addr.sun_path);
     cli_addrlen = offsetof(struct sockaddr_un, sun_path) + strlen(cli_addr.sun_path);
     unlink(cli_addr.sun_path);
     
