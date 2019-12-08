@@ -84,7 +84,7 @@ void loop_select(void){
             log_sys("select error");
         }
         if(FD_ISSET(listenfd, &rset)){
-            /*新的客户端请求到来*/
+            /*新的客户端请求到来 客户端调用cli_conn时候触发*/
             if( (clifd = serv_accept(listenfd, &uid)) < 0){
                 log_sys("server_accept error: %d", clifd);
             }
@@ -100,7 +100,7 @@ void loop_select(void){
             //新的客户端请求到来 加入到select的readset 中
             continue;
         }
-        //不是来自新的客户端的请求，来自现有客户端的请求
+        //不是来自新的客户端的请求，来自现有客户端的请求 客户端调用cli_conn之后调用writev触发
         for(i = 0; i <= maxi; ++i){
             if( (clifd = client[i].fd) < 0){
                 continue;
