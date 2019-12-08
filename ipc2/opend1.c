@@ -187,7 +187,7 @@ void loop_poll(void){
             pfds[numfd].events = POLLIN;
             pfds[numfd].revents = 0;
             numfd++;
-			log_msg("new connection: uid %d, fd %d", uid, clifd);
+			log_msg("new connection in poll: uid %d, fd %d", uid, clifd);
         }
 
         for(i = 1; i < numfd; ++i){

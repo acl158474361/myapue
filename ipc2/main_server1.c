@@ -29,5 +29,5 @@ int main(int argc, char* argv[]){
     if(debug == 0){
         daemonize("opend"); //如果不debug 就使用守护进程 deamonize改变了工作目录
     }
-    loop_select();
+    loop_poll();
 }
