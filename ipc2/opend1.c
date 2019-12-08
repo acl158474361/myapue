@@ -1,6 +1,7 @@
 #include "opend.h"
 #include <sys/select.h>
 #include <fcntl.h>
+#include <poll.h>
 
 #define MALLOC 10
 
@@ -123,6 +124,98 @@ void loop_select(void){
     }
 
 }
+
+static struct pollfd* grow_pollfd(struct pollfd *pfds, int *maxfd){
+    int i;
+    int oldmax = *maxfd;
+    int newmax = oldmax + MALLOC;
+    
+    if( (pfds = realloc(pfds, newmax * sizeof(struct pollfd))) == NULL){
+        err_sys("realloc error");
+    }
+    for(i = oldmax; i < newmax; ++i){
+        pfds[i].fd = -1;
+        pfds[i].events = POLLIN;
+        pfds[i].revents = 0;
+    }
+    *maxfd = newmax;
+    return pfds;
+}
+
+void loop_poll(void){
+    struct pollfd *pfds; // pollfd 数组
+    int i;
+    int listenfd; //服务器监听套接字
+    int numfd = 1; //被轮询的套接字数目 最开始只有listen套接字 
+    //同时也是下一个新加入客户端套接字在pfds中的下标
+    int clifd;
+    uid_t uid; //客户端有效进程ID
+    int maxfd = MALLOC; //pfds可以容纳的最大套接字数目
+    int i;
+    int nread; //从客户端套接字中读取的字节数
+    char buf[MAXLINE];
+    if( (pfds = malloc(MALLOC * sizeof(struct pollfd))) == NULL){
+        err_sys("malloc error");
+    }
+    for(i = 0; i < MALLOC; ++i){
+        pfds[i].fd = -1;
+        pfds[i].events = POLLIN;
+        pfds[i].revents = 0;
+    }
+
+    //把 listenfd 包含到 pfds中去
+    if( (listenfd = serv_listen(CS_OPEN)) < 0){
+        log_sys("serv_listen error");
+    }
+    client_add(listenfd, 0);
+    pfds[0].fd = listenfd;
+
+    for(;;){
+        if(poll(pfds, numfd, -1) < 0){
+            log_sys("poll error");
+        }
+        if(pfds[0].revents & POLLIN){
+            /*新的客户端连接到来*/
+            if( (clifd = serv_accept(listenfd, &uid)) < 0){
+                log_sys("serv_accept error: %d");
+            }
+            client_add(clifd, uid);
+
+            if(numfd == maxfd){
+                pfds = grow_pollfd(pfds, &maxfd);
+            }
+            pfds[numfd].fd = clifd;
+            pfds[numfd].events = POLLIN;
+            pfds[numfd].revents = 0;
+            numfd++;
+			log_msg("new connection: uid %d, fd %d", uid, clifd);
+        }
+
+        for(i = 1; i < numfd; ++i){
+            if(pfds[i].revents & POLLHUP){
+                goto hungup;
+            }else if(pfds[i].revents & POLLIN){
+                if( (nread = read(pfds[i].fd, buf, MAXLINE)) < 0){
+                    log_sys("read error on fd %d", pfds[i].fd);
+                }else if(nread == 0){
+hungup:             
+                    log_msg("closed: uid %d, fd %d",
+                        client[i].uid, pfds[i].fd);
+                    client_del(pfds[i].fd);
+                    close(pfds[i].fd);
+
+                    
+                }else{
+                    handled_request(buf, nread, pfds[i].fd, 
+                        client[i].uid);
+                }
+            }
+        }
+    }
+}
+
+
+
 
 
 void handled_request(char *buf, int nread, int clifd, uid_t uid){

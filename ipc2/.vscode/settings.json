@@ -25,6 +25,7 @@
         "open.h": "c",
         "getopt.h": "c",
         "syslog.h": "c",
-        "select.h": "c"
+        "select.h": "c",
+        "poll.h": "c"
     }
 }
