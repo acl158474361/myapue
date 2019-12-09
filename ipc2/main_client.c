@@ -1,6 +1,9 @@
-#include "open.h"
-#include <fcntl.h>
-#include "send_recv.h"
+#include <fcntl.h> // C system headers
+
+#include "apue.h" // other libraries' headers
+
+#include "open.h" // your project's headers
+
 #define BUFFSIZE 8192
 
 int main(int argc, char* argv[]){

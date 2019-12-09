@@ -1,6 +1,8 @@
-#include "send_recv.h"
-#include "apue.h"
-#include <sys/socket.h>
+#include "send_recv.h" // Related header
+
+#include <sys/socket.h> // C system headers
+
+#include "apue.h" // other libraries' headers
 
 static struct cmsghdr *send_ctlptr = NULL;
 static struct cmsghdr *recv_ctlptr = NULL;

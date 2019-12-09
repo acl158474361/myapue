@@ -1,9 +1,8 @@
-#ifndef _UNIX_SOCKET__
-#define _UNIX_SOCKET__
+#ifndef _UNIX_SOCKET__H
+#define _UNIX_SOCKET__H
 
-#include "apue.h"
-#include <sys/socket.h>
-#include <sys/un.h>
+#include <sys/types.h>
+
 int serv_listen(const char *name);
 
 int serv_accept(int serv_sockfd, uid_t *uidptr);

@@ -1,7 +1,11 @@
-#include "opend.h"
-#include <sys/select.h>
+#include "opend.h" // Related header
+
+#include <sys/select.h> // C system headers
 #include <fcntl.h>
 #include <poll.h>
+#include <errno.h>
+
+#include "apue.h" // other libraries' headers
 
 #define MALLOC 10
 

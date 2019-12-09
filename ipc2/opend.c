@@ -1,5 +1,9 @@
-#include "opend.h"
-#include <fcntl.h>
+#include "opend.h" // Related header
+
+#include <fcntl.h> // C system headers
+#include <errno.h>
+
+#include "apue.h" // other libraries' headers
 
 #define MAXARGC 50
 #define WHITE " \t\n"

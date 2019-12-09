@@ -26,6 +26,7 @@
         "getopt.h": "c",
         "syslog.h": "c",
         "select.h": "c",
-        "poll.h": "c"
+        "poll.h": "c",
+        "uio.h": "c"
     }
 }

@@ -1,7 +1,9 @@
-#ifndef _SEND_RECV__
-#define _SEND_RECV__
+#ifndef _SEND_RECV__H
+#define _SEND_RECV__H
 
-#include "apue.h"
+#include <sys/types.h>
+#include <stddef.h>
+
 int send_fd(int serv_sockfd, int fd);
 
 int send_err(int serv_sockfd, int status, const char *errmsg);

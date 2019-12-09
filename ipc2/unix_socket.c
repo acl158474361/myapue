@@ -1,6 +1,16 @@
-#include "unix_socket.h"
+#include "unix_socket.h" // Related header
+
+#include <sys/socket.h> // C system headers
+#include <sys/un.h>
+#include <sys/stat.h>
 #include <errno.h>
 #include <time.h>
+#include <string.h>
+#include <unistd.h>
+#include <stddef.h>
+#include <stdlib.h>
+#include <stdio.h>
+
 
 int serv_listen(const char *name){
     struct sockaddr_un serv_addr;

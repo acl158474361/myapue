@@ -1,5 +1,11 @@
-#include "open.h"
-#include <sys/uio.h>
+#include "open.h" // Related header
+
+#include <sys/uio.h> // C system headers
+
+#include "apue.h" // other libraries' headers
+
+#include "send_recv.h" // your project's headers
+#include "unix_socket.h"
 
 
 int csopen(char *name, int oflag){

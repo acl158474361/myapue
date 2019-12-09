@@ -1,6 +1,6 @@
-#include "apue.h"
-#include <errno.h>
-#include "unix_socket.h"
+#pragma once
+
+#include <sys/types.h>
 
 #define CL_OPEN "open"
 #define CS_OPEN "/tmp/opend.socket"

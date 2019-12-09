@@ -1,6 +1,9 @@
-#include "opend.h"
-#include <syslog.h>
+#include <syslog.h> // C system headers
+#include <getopt.h>
 
+#include "apue.h" // other libraries' headers
+
+#include "opend.h" // your project's headers
 
 int debug, oflag, client_size, log_to_stderr;
 
