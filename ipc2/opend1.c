@@ -7,6 +7,9 @@
 
 #include "apue.h" // other libraries' headers
 
+#include "unix_socket.h" // your project's headers
+#include "send_recv.h"
+
 #define MALLOC 10
 
 #define MAXARGC 50
